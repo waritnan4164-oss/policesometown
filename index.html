@@ -13,24 +13,86 @@
     <style>
         body { 
             font-family: 'Kanit', sans-serif; 
-            background-color: #0d0f12; /* สีพื้นหลังน้ำเงินเข้ม */
+            background-color: #0d0f12; 
         }
-        /* ปรับแต่งการ์ดและกรอบต่างๆ ให้เป็นธีมน้ำเงินดำตามภาพ image_e571bf.png */
         .bg-card { background-color: #141822; border: 1px solid #286aee; }
-        .bg-subcard { background-color: #0b0d13; border: 1px solid #1e293b; }
         
-        .summary-box { background-color: #070b13; border: 1px solid #131c2e; }
-        .head-nobail { background-color: #240b0b; border-bottom: 1px solid #381212; }
-        .head-bail { background-color: #0b2113; border-bottom: 1px solid #12331d; }
-        
-        /* สีเขียวสว่างสำหรับรายละเอียดด้านใน */
-        .text-green-custom { color: #00ff66; } 
-
-        .car-btn-dark {
-            background-color: #04060b;
-            border: 1px solid #131c2e;
+        /* สไตล์กล่องคดีปกติ */
+        .bg-subcard { 
+            background-color: #0b0d13; 
+            border: 1px solid #1e293b; 
+            transition: all 0.2s ease-in-out;
         }
         
+        /* เอฟเฟกต์ Hover ให้กล่องคดีเด้งขึ้นมาเล็กน้อยและสีเข้มขึ้น */
+        .bg-subcard:hover {
+            transform: translateY(-2px) scale(1.02);
+            background-color: #0a1120;
+            border-color: #1e3a8a;
+            box-shadow: 0 4px 12px rgba(0, 132, 255, 0.15);
+        }
+
+        /* กรอบสีน้ำเงินเรืองแสงรอบการ์ดคดีเมื่อถูกติ๊กเลือก (อิงจากภาพ image_535820.png) */
+        .bg-subcard:has(input:checked) {
+            border-color: #0084ff !important;
+            background-color: #071126 !important;
+            box-shadow: 0 0 12px rgba(0, 132, 255, 0.4) !important;
+        }
+
+        /* 🔷 ใหม่! ปรับปรุงหน้าสรุปข้อความตามดีไซน์ในภาพ watermarked_img_16893322053574914650.png */
+        .summary-box-neon { 
+            background: linear-gradient(145deg, #050912, #081021); 
+            border: 2px solid #286aee; 
+            box-shadow: 0 0 15px rgba(0, 188, 255, 0.3), inset 0 0 10px rgba(0, 188, 255, 0.05);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .summary-box-neon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 22px rgba(0, 188, 255, 0.45), inset 0 0 12px rgba(0, 188, 255, 0.1);
+        }
+        
+        .head-nobail-neon { 
+            background: linear-gradient(90deg, #2a0808, #180505); 
+            border-bottom: 2px solid #ef4444; 
+        }
+        .head-bail-neon { 
+            background: linear-gradient(90deg, #051c0e, #031008); 
+            border-bottom: 2px solid #22c55e; 
+        }
+        .head-twitter-neon {
+            background: linear-gradient(90deg, #091a2f, #050e1a);
+            border-bottom: 2px solid #00a2ff;
+        }
+        
+        /* เอฟเฟกต์สำหรับปุ่มแต่งรถ */
+        .car-btn-dark { 
+            background-color: #04060b; 
+            border: 1px solid #131c2e; 
+            transition: all 0.2s ease;
+        }
+        .car-btn-dark:hover {
+            transform: translateY(-1px);
+            background-color: #090f1a;
+        }
+        
+        /* สไตล์สำหรับปุ่มที่โดน Disable */
+        input:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+        input:disabled ~ div, input:disabled ~ p {
+            opacity: 0.3;
+        }
+        label:has(input:disabled):hover {
+            transform: none !important;
+            background-color: #04060b !important;
+            border-color: #131c2e !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+        }
+
         .custom-checkbox {
             appearance: none;
             width: 15px;
@@ -56,146 +118,138 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+
+        .btn-bounce {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .btn-bounce:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body class="text-gray-200 min-h-screen p-6 pb-24 select-none">
 
-    <!-- Header เวอร์ชันปรับปรุงตามภาพ image_e655e6.png -->
+    <!-- Header -->
     <div class="max-w-7xl mx-auto mb-8 flex flex-col items-center justify-center text-center select-none">
-        <!-- โลโก้ตำรวจเดิม (ถ้าต้องการใส่) -->
-        <img src="1000018386.png" alt="Police Some Town Logo" class="w-44 h-auto mb-3 drop-shadow-[0_0_20px_rgba(14,165,233,0.3)]">
-        
-        <!-- ตัวอักษรไล่เฉดสีเหมือนในรูปเป๊ะ -->
+        <img src="1000018386.png" 
+             alt="Police Some Town Logo" 
+             class="w-56 h-auto mb-3 filter drop-shadow-[0_0_20px_rgba(0,188,255,0.45)] mix-blend-lighten">
         <h1 class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#448aff] via-[#00bcff] to-[#0077ff] tracking-wide filter drop-shadow-[0_2px_8px_rgba(0,188,255,0.2)]">
             ระบบคิดค่าปรับ Some Town
         </h1>
-        
-        <!-- เส้นใต้ไล่เฉดสี (Gradient Underline) วางตรงกลาง -->
         <div class="w-32 h-[3px] mt-3 rounded-full bg-gradient-to-r from-[#1e40af] via-[#00bcff] to-[#1e3a8a] shadow-[0_0_10px_rgba(0,188,255,0.5)]"></div>
     </div>
 
-    <!-- หน้าต่างหลักเนื้อหา (แบ่งตามแท็บ) -->
+    <div class="text-center mb-6">
+        <a href="login.html" class="btn-bounce inline-block bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-extrabold py-2 px-4 rounded-lg shadow-md">🔒 เข้าสู่ระบบ</a>
+    </div>
+
     <div class="max-w-7xl mx-auto">
-        
-        <!-- ================= [TAB 1 & 2] หน้าจัดการฟอร์มเลือกข้อหาปกติ ================= -->
         <div id="main-form-wrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <div class="lg:col-span-2 space-y-6">
-                <!-- [TAB 1 CONTENT] งานดำ / หลบหนี -->
+                <!-- แท็บ 1 -->
                 <div id="tab-content-1" class="tab-content space-y-6">
+                    <!-- หมวดงานดำ -->
                     <div class="bg-card p-5 rounded-xl shadow-lg">
                         <h2 class="text-base font-bold text-cyan-400 mb-4 flex items-center gap-2">🔷 หมวดสิ่งผิดกฎหมาย / งานดำ</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm w-full">
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm w-full">
                                     <input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="1000" data-time="5" data-name="จกพลาด" data-type="normal">
                                     <div><p class="font-medium text-gray-200">จกพลาด</p><p class="text-xs text-blue-400">1,000 | 5 นาที</p></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm w-full">
+                                </span>
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm w-full">
                                     <input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="1000" data-time="5" data-name="ปล้นพลาด" data-type="normal">
                                     <div><p class="font-medium text-gray-200">ปล้นพลาด</p><p class="text-xs text-blue-400">1,000 | 5 นาที</p></div>
-                                </label>
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm">
+                                </span>
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm">
                                     <input type="checkbox" id="check-poon" class="crime-checkbox custom-checkbox" data-fine="2000" data-time="5" data-name="ปูน" data-type="piece">
                                     <div><p class="font-medium text-gray-200">ปูน</p><p class="text-xs text-blue-400">2,000 | 5 นาที</p></div>
-                                </label>
-                                <input type="number" id="num-poon" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm">
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm">
+                                </span>
+                                <input type="number" id="num-poon" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm relative z-10">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm">
                                     <input type="checkbox" id="check-wire" class="crime-checkbox custom-checkbox" data-fine="2000" data-time="5" data-name="ลวด" data-type="piece">
                                     <div><p class="font-medium text-gray-200">ลวด / สายไฟ</p><p class="text-xs text-blue-400">2,000 | 5 นาที</p></div>
-                                </label>
-                                <input type="number" id="num-wire" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm">
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm">
+                                </span>
+                                <input type="number" id="num-wire" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm relative z-10">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm">
                                     <input type="checkbox" id="check-powder" class="crime-checkbox custom-checkbox" data-fine="1000" data-time="1" data-name="ผงหลอดไฟ" data-type="pack10">
                                     <div><p class="font-medium text-gray-200">ผงหลอดไฟ</p><p class="text-xs text-blue-400">เศษ >= 5 ปัดขึ้น</p></div>
-                                </label>
-                                <input type="number" id="num-powder" value="10" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm">
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm">
+                                </span>
+                                <input type="number" id="num-powder" value="10" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm relative z-10">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm">
                                     <input type="checkbox" id="check-powder2" class="crime-checkbox custom-checkbox" data-fine="2500" data-time="5" data-name="ผงหลอดไฟแปรรูป" data-type="piece">
                                     <div><p class="font-medium text-gray-200">ผงหลอดไฟแปรรูป</p><p class="text-xs text-blue-400">2,500 | 5 นาที</p></div>
-                                </label>
-                                <input type="number" id="num-powder2" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm">
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm">
+                                </span>
+                                <input type="number" id="num-powder2" value="1" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm relative z-10">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm">
                                     <input type="checkbox" id="check-money" class="crime-checkbox custom-checkbox" data-fine="1000" data-time="1" data-name="เงินแดง" data-type="pack10">
                                     <div><p class="font-medium text-gray-200">เงินแดง</p><p class="text-xs text-blue-400">เศษ >= 5 ปัดขึ้น</p></div>
-                                </label>
-                                <input type="number" id="num-money" value="10" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm">
-                            </div>
-                            <div class="flex items-center justify-between p-3 bg-subcard rounded-xl">
-                                <label class="flex items-center gap-3 cursor-pointer text-sm w-full">
+                                </span>
+                                <input type="number" id="num-money" value="10" min="1" class="w-14 bg-slate-900 border border-slate-700 text-center text-cyan-400 font-bold rounded p-1 text-sm relative z-10">
+                            </label>
+                            <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
+                                <span class="flex items-center gap-3 text-sm w-full">
                                     <input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="10000" data-time="10" data-name="ทำลายหลักฐาน" data-type="normal">
                                     <div><p class="font-medium text-gray-200">ทำลายหลักฐาน</p><p class="text-xs text-blue-400">10,000 | 10 นาที</p></div>
-                                </label>
-                            </div>
+                                </span>
+                            </label>
                         </div>
                     </div>
 
+                    <!-- หมวดพื้นที่หลบหนี -->
                     <div class="bg-card p-5 rounded-xl shadow-lg">
                         <h2 class="text-base font-bold text-cyan-400 mb-4 flex items-center gap-2">🌐 หมวดพื้นที่หลบหนี</h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="5000" data-time="5" data-name="พื้นที่สุ่มเสี่ยง" data-type="normal"><div><p class="font-medium">พื้นที่สุ่มเสี่ยง</p><p class="text-xs text-blue-400">5,000 | 5 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-hard" class="crime-checkbox custom-checkbox" data-fine="8000" data-time="10" data-name="หลบหนีพื้นที่เข้าถึงยาก" data-type="normal"><div><p class="font-medium">เข้าถึงยาก</p><p class="text-xs text-blue-400">8,000 | 10 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-city" onchange="validateAreas('city')" class="crime-checkbox custom-checkbox" data-fine="2000" data-time="5" data-name="หลบหนีในเมือง" data-type="normal"><div><p class="font-medium">หลบหนีในเมือง</p><p class="text-xs text-blue-400">2,000 | 5 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="5000" data-time="5" data-name="หลบหนีนอกเมือง" data-type="normal"><div><p class="font-medium">หลบหนีนอกเมือง</p><p class="text-xs text-blue-400">5,000 | 5 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="15000" data-time="10" data-name="หลบหนีเมืองบน" data-type="normal"><div><p class="font-medium">หลบหนีเมืองบน</p><p class="text-xs text-blue-400">15,000 | 10 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="10000" data-time="10" data-name="หลบหนีสนามบิน" data-type="normal"><div><p class="font-medium">หลบหนีสนามบิน</p><p class="text-xs text-blue-400">10,000 | 10 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" class="crime-checkbox custom-checkbox" data-fine="12000" data-time="10" data-name="หลบหนีทะเลทราย" data-type="normal"><div><p class="font-medium">หลบหนีทะเลทราย</p><p class="text-xs text-blue-400">12,000 | 10 นาที</p></div></label></div>
-                            <div class="p-3 bg-subcard rounded-xl"><label class="flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-water" onchange="validateAreas('water')" class="crime-checkbox custom-checkbox" data-fine="20000" data-time="10" data-name="หลบหนีทางน้ำ" data-type="normal"><div><p class="font-medium">หลบหนีทางน้ำ</p><p class="text-xs text-blue-400">20,000 | 10 นาที</p></div></label></div>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-risk" class="crime-checkbox custom-checkbox" data-fine="5000" data-time="5" data-name="พื้นที่สุ่มเสี่ยง" data-type="normal"><div><p class="font-medium">พื้นที่สุ่มเสี่ยง</p><p class="text-xs text-blue-400">5,000 | 5 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-city" class="crime-checkbox custom-checkbox" data-fine="2000" data-time="5" data-name="หลบหนีในเมือง" data-type="normal"><div><p class="font-medium">หลบหนีในเมือง</p><p class="text-xs text-blue-400">2,000 | 5 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-out" class="crime-checkbox custom-checkbox" data-fine="5000" data-time="5" data-name="หลบหนีนอกเมือง" data-type="normal"><div><p class="font-medium">หลบหนีนอกเมือง</p><p class="text-xs text-blue-400">5,000 | 5 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-upper" class="crime-checkbox custom-checkbox" data-fine="15000" data-time="10" data-name="หลบหนีเมืองบน" data-type="normal"><div><p class="font-medium">หลบหนีเมืองบน</p><p class="text-xs text-blue-400">15,000 | 10 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-air" class="crime-checkbox custom-checkbox" data-fine="10000" data-time="10" data-name="หลบหนีสนามบิน" data-type="normal"><div><p class="font-medium">หลบหนีสนามบิน</p><p class="text-xs text-blue-400">10,000 | 10 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-desert" class="crime-checkbox custom-checkbox" data-fine="12000" data-time="10" data-name="หลบหนีทะเลทราย" data-type="normal"><div><p class="font-medium">หลบหนีทะเลทราย</p><p class="text-xs text-blue-400">12,000 | 10 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-hard" class="crime-checkbox custom-checkbox" data-fine="8000" data-time="10" data-name="พื้นที่เข้าถึงยาก" data-type="normal"><div><p class="font-medium">เข้าถึงยาก</p><p class="text-xs text-blue-400">8,000 | 10 นาที</p></div></label>
+                            <label class="p-3 bg-subcard rounded-xl flex items-center gap-3 cursor-pointer text-sm"><input type="checkbox" id="area-water" class="crime-checkbox custom-checkbox" data-fine="20000" data-time="10" data-name="หลบหนีทางน้ำ" data-type="normal"><div><p class="font-medium">หลบหนีทางน้ำ</p><p class="text-xs text-blue-400">20,000 | 10 นาที</p></div></label>
                         </div>
                     </div>
                 </div>
 
-                <!-- [TAB 2 CONTENT] จับเหตุซึ่งหน้า -->
+                <!-- แท็บ 2 -->
                 <div id="tab-content-2" class="tab-content space-y-6 hidden">
-                    <div class="bg-card p-5 rounded-xl">
-                        <h2 class="text-base font-bold text-cyan-400 mb-4 flex items-center gap-2">🔷 หมวดที่ 2 การก่อเหตุฯ</h2>
-                        <div id="m2-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"></div>
-                    </div>
-                    <div class="bg-card p-5 rounded-xl border border-blue-900/40">
-                        <h2 class="text-base font-bold text-cyan-400 mb-4 flex items-center gap-2">🛡️ หมวดที่ 3 เกี่ยวกับหน่วยงาน (ไม่ให้ประกัน)</h2>
-                        <div id="m3-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"></div>
-                    </div>
+                    <div class="bg-card p-5 rounded-xl"><h2 class="text-base font-bold text-cyan-400 mb-4 flex items-center gap-2">🔷 หมวดที่ 2 การก่อเหตุฯ</h2><div id="m2-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"></div></div>
+                    <div class="bg-card p-5 rounded-xl border border-blue-900/40"><h2 class="text-base font-bold text-cyan-400 mb-4 flex items-center gap-2">🛡️ หมวดที่ 3 เกี่ยวกับหน่วยงาน (ไม่ให้ประกัน)</h2><div id="m3-list" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm"></div></div>
                 </div>
             </div>
 
-            <!-- ฝั่งขวา: คำนวณราคาสรุปย่อของฟอร์มหลัก -->
+            <!-- ฝั่งขวาสรุปคำนวณ -->
             <div class="space-y-4">
                 <div class="bg-card p-4 rounded-xl space-y-3">
                     <h3 class="text-sm font-bold text-cyan-400 flex items-center gap-2">🚗 โทษแต่งรถ</h3>
                     <div class="grid grid-cols-3 gap-2 text-xs">
-                        <label class="car-btn-dark p-2.5 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer text-gray-200">
-                            <input type="checkbox" id="car-wheel" class="custom-checkbox"> <span>ล้อโทนมืด (x2)</span>
-                        </label>
-                        <label class="car-btn-dark p-2.5 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer text-gray-200">
-                            <input type="checkbox" id="car-color" class="custom-checkbox"> <span>สีรถโทนมืด (x2)</span>
-                        </label>
-                        <label class="car-btn-dark p-2.5 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer text-gray-200">
-                            <input type="checkbox" id="car-trade" class="custom-checkbox"> <span>เทรดรถ (x5)</span>
-                        </label>
+                        <label class="car-btn-dark p-2.5 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer text-gray-200"><input type="checkbox" id="car-wheel" class="custom-checkbox"> <span>ล้อโทนมืด (x2)</span></label>
+                        <label class="car-btn-dark p-2.5 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer text-gray-200"><input type="checkbox" id="car-color" class="custom-checkbox"> <span>สีรถโทนมืด (x2)</span></label>
+                        <label class="car-btn-dark p-2.5 rounded-lg flex items-center justify-center gap-1.5 cursor-pointer text-gray-200"><input type="checkbox" id="car-trade" class="custom-checkbox"> <span>เทรดรถ (x5)</span></label>
                     </div>
                 </div>
 
                 <div class="bg-card p-4 rounded-xl space-y-2">
                     <span class="text-sm font-bold text-cyan-400 block">🤝 เลือกประเภทประกันตัว</span>
                     <div class="grid grid-cols-2 gap-2 text-xs">
-                        <label id="lbl-bail-self" class="bg-slate-950 border border-slate-800 text-gray-300 rounded-lg p-2.5 flex items-center justify-center gap-1.5 cursor-pointer">
-                            <input type="checkbox" id="bail-self" onclick="handleBailClick('self')" class="custom-checkbox"> ประกันเอง (2000/นาที)
-                        </label>
-                        <label id="lbl-bail-rel" class="bg-slate-950 border border-slate-800 text-gray-300 rounded-lg p-2.5 flex items-center justify-center gap-1.5 cursor-pointer">
-                            <input type="checkbox" id="bail-rel" onclick="handleBailClick('rel')" class="custom-checkbox"> ญาติประกัน (1000/นาที)
-                        </label>
+                        <label id="lbl-bail-self" class="bg-slate-950 border border-slate-800 text-gray-300 rounded-lg p-2.5 flex items-center justify-center gap-1.5 cursor-pointer car-btn-dark"><input type="checkbox" id="bail-self" onclick="handleBailClick('self')" class="custom-checkbox"> ประกันเอง (2000/นาที)</label>
+                        <label id="lbl-bail-rel" class="bg-slate-950 border border-slate-800 text-gray-300 rounded-lg p-2.5 flex items-center justify-center gap-1.5 cursor-pointer car-btn-dark"><input type="checkbox" id="bail-rel" onclick="handleBailClick('rel')" class="custom-checkbox"> ญาติประกัน (1000/นาที)</label>
                     </div>
                     <div id="bail-warning" class="text-xs text-red-400 font-medium pt-1 flex items-center gap-1 hidden">⚠️ คดีนี้มีข้อหาที่ไม่สามารถประกันตัวได้</div>
                 </div>
@@ -213,86 +267,102 @@
 
                     <div id="side-list-crimes" class="h-20 bg-slate-950 rounded-lg p-2.5 text-sm text-gray-400 overflow-y-auto border border-slate-800">ข้อหาจะแสดงที่นี่...</div>
                     <div class="grid grid-cols-1 gap-2">
-                        <button onclick="processCopyMain()" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-extrabold py-3 rounded-lg text-sm shadow-md cursor-pointer transition flex items-center justify-center gap-2">
-                            📄 คัดลอกข้อหา
-                        </button>
-                        <button onclick="resetSystem()" class="w-full bg-slate-900 text-gray-400 font-bold py-2 rounded-lg text-xs cursor-pointer">🗑️ ล้างค่า</button>
+                        <button id="btn-main-copy" onclick="processCopyMain()" class="btn-bounce w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-extrabold py-3 rounded-lg text-sm shadow-md cursor-pointer transition-all duration-300 flex items-center justify-center gap-2">📄 คัดลอกข้อหา</button>
+                        <button onclick="resetSystem()" class="btn-bounce w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg text-xs cursor-pointer shadow-md transition-all duration-200">🗑️ ล้างค่า</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= [TAB 3] หน้าสรุปข้อความ ================= -->
+        <!-- 🟦 แท็บ 3: ปรับปรุงโครงสร้างและการตกแต่งตาม watermarked_img_16893322053574914650.png -->
         <div id="tab-content-3" class="tab-content hidden space-y-6">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
-                <!-- กล่องซ้าย: แบบไม่ประกันตัว -->
-                <div class="summary-box rounded-xl overflow-hidden shadow-xl">
-                    <div class="head-nobail p-3 text-center flex items-center justify-center gap-2 text-red-500 font-bold text-sm tracking-wide">
+                <!-- ใบสรุปแบบไม่ประกันตัว -->
+                <div class="summary-box-neon">
+                    <div class="head-nobail-neon p-4 text-center text-red-400 font-bold text-sm tracking-wider shadow-inner">
                         ❌ แบบไม่ประกันตัว
                     </div>
-                    <div class="p-6 space-y-4 text-sm font-normal min-h-[190px]">
-                        <p class="text-cyan-400">ข้อหา: <span id="log-nobail-title" class="text-gray-200 ml-1"></span></p>
-                        <p class="text-cyan-400">ค่าปรับ: <span id="log-nobail-fine" class="text-gray-200 ml-1">0</span></p>
-                        <p class="text-cyan-400">เวลา: <span id="log-nobail-time" class="text-gray-200 ml-1">0 นาที</span></p>
+                    <div class="p-6 space-y-4 text-sm font-normal min-h-[190px] bg-[#03060c]/80">
+                        <div class="flex flex-col gap-1 border-b border-slate-800/60 pb-3">
+                            <span class="text-xs text-gray-400 uppercase tracking-wider">ข้อหาทั้งหมด</span>
+                            <span id="log-nobail-title" class="text-gray-200 font-medium text-base">-</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 pt-1">
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-xs text-gray-400 uppercase tracking-wider">ค่าปรับสุทธิ</span>
+                                <span id="log-nobail-fine" class="text-xl font-bold text-red-400">0</span>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-xs text-gray-400 uppercase tracking-wider">เวลาจำคุก</span>
+                                <span id="log-nobail-time" class="text-xl font-bold text-gray-200">0 นาที</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-3 bg-[#04060b]">
-                        <button onclick="copyToClipboard('log-nobail-btn')" id="log-nobail-btn" data-text="" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-2.5 px-4 rounded-lg text-xs flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
-                            📋 คัดลอก (ไม่ประกัน)
-                        </button>
+                    <div class="p-4 bg-[#020408] border-t border-slate-900 flex justify-center">
+                        <button onclick="copyToClipboard('log-nobail-btn')" id="log-nobail-btn" class="btn-bounce w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all duration-300">📋 คัดลอกข้อมูล (ไม่ประกันตัว)</button>
                     </div>
                 </div>
 
-                <!-- กล่องขวา: แบบประกันตัว -->
-                <div class="summary-box rounded-xl overflow-hidden shadow-xl">
-                    <div class="head-bail p-3 text-center flex items-center justify-center gap-2 text-green-500 font-bold text-sm tracking-wide">
+                <!-- ใบสรุปแบบประกันตัว -->
+                <div class="summary-box-neon">
+                    <div class="head-bail-neon p-4 text-center text-green-400 font-bold text-sm tracking-wider shadow-inner">
                         ✓ แบบประกันตัว
                     </div>
-                    <div class="p-6 space-y-4 text-sm font-normal min-h-[190px]">
-                        <p class="text-cyan-400">ข้อหา: <span id="log-bail-title" class="text-gray-200 ml-1"></span></p>
-                        <p class="text-cyan-400">ค่าปรับ: <span id="log-bail-fine" class="text-gray-200 ml-1">0</span></p>
-                        <p class="text-cyan-400">เวลา: <span id="log-bail-time" class="text-gray-200 ml-1">0 นาที</span></p>
+                    <div class="p-6 space-y-4 text-sm font-normal min-h-[190px] bg-[#03060c]/80">
+                        <div class="flex flex-col gap-1 border-b border-slate-800/60 pb-3">
+                            <span class="text-xs text-gray-400 uppercase tracking-wider">ข้อหาทั้งหมด</span>
+                            <span id="log-bail-title" class="text-gray-200 font-medium text-base">-</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 pt-1">
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-xs text-gray-400 uppercase tracking-wider">ค่าปรับ + ค่าประกัน</span>
+                                <span id="log-bail-fine" class="text-xl font-bold text-green-400">0</span>
+                            </div>
+                            <div class="flex flex-col gap-0.5">
+                                <span class="text-xs text-gray-400 uppercase tracking-wider">เวลาจำคุกหลังประกัน</span>
+                                <span id="log-bail-time" class="text-xl font-bold text-gray-200">5 นาที</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="p-3 bg-[#04060b]">
-                        <button onclick="copyToClipboard('log-bail-btn')" id="log-bail-btn" data-text="" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold py-2.5 px-4 rounded-lg text-xs flex items-center justify-center gap-2 shadow-md transition cursor-pointer">
-                            📋 คัดลอก (ประกันตัว)
-                        </button>
+                    <div class="p-4 bg-[#020408] border-t border-slate-900 flex justify-center">
+                        <button onclick="copyToClipboard('log-bail-btn')" id="log-bail-btn" class="btn-bounce w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all duration-300">📋 คัดลอกข้อมูล (ประกันตัว)</button>
                     </div>
                 </div>
-
             </div>
 
-            <!-- กล่องล่าง: ยอดปรับสำหรับลงทวิตเตอร์ -->
-            <div class="summary-box p-5 rounded-xl shadow-xl space-y-4">
-                <div class="text-xs font-bold text-cyan-400 text-center flex items-center justify-center gap-2 tracking-wide">
+            <!-- กล่องยอดสำหรับทวิตเตอร์แบบนีออนยาวขนานด้านล่าง -->
+            <div class="summary-box-neon">
+                <div class="head-twitter-neon p-3 text-center text-cyan-400 font-bold text-xs tracking-widest uppercase">
                     🦜 ยอดปรับสำหรับลงทวิตเตอร์
                 </div>
-                <div class="bg-[#030407] rounded-lg p-4 text-center font-bold text-sm text-cyan-400 tracking-wider">
-                    <span id="log-twitter-text">ค่าปรับ 0 + ค่าประกัน 0 = รวม 0</span>
-                </div>
-                <div class="flex justify-center">
-                    <button onclick="copyToClipboard('log-twitter-btn')" id="log-twitter-btn" data-text="" class="w-full md:w-auto bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2.5 px-10 rounded-lg text-xs flex items-center justify-center gap-2 shadow-lg transition cursor-pointer">
+                <div class="p-6 bg-[#03060c]/90 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div class="text-center md:text-left">
+                        <span class="text-xs text-slate-400 block mb-1 tracking-wide">ข้อความสรุปเม็ดเงินคดี:</span>
+                        <div id="log-twitter-text" class="text-base md:text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400">
+                            ค่าปรับ 0 + ค่าประกัน 0 = รวม 0
+                        </div>
+                    </div>
+                    <button onclick="copyToClipboard('log-twitter-btn')" id="log-twitter-btn" class="btn-bounce w-full md:w-auto bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-bold py-3 px-8 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all duration-300">
                         📋 คัดลอกตัวเลข (สำหรับทวิต)
                     </button>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- แถบเมนูด้านล่างสุด -->
+    <!-- แถบเมนูล่าง -->
     <div class="fixed bottom-0 left-0 right-0 bg-[#04060b] border-t border-slate-900 p-3 flex justify-center gap-4 z-50">
-        <button onclick="switchTab(1)" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md cursor-pointer transition">📊 งานดำ / หลบหนี</button>
-        <button onclick="switchTab(2)" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 bg-slate-900 text-gray-400 hover:bg-slate-800 cursor-pointer transition">🚨 จับเหตุซึ่งหน้า</button>
-        <button onclick="switchTab(3)" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs flex items-center gap-2 bg-slate-900 text-gray-400 hover:bg-slate-800 cursor-pointer transition">📝 หน้าสรุปข้อความ</button>
+        <button onclick="switchTab(1)" id="btn-tab-1" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs bg-gradient-to-r from-blue-500 to-cyan-500 text-white shadow-md cursor-pointer">📊 งานดำ / หลบหนี</button>
+        <button onclick="switchTab(2)" id="btn-tab-2" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs bg-slate-900 text-gray-400 hover:bg-slate-800 cursor-pointer">🚨 จับเหตุซึ่งหน้า</button>
+        <button onclick="switchTab(3)" id="btn-tab-3" class="tab-btn px-4 py-2 rounded-lg font-bold text-xs bg-slate-900 text-gray-400 hover:bg-slate-800 cursor-pointer">📝 หน้าสรุปข้อความ</button>
     </div>
 
     <script>
         const m2Data = [
+            { name: "ทำร้ายร่างกายประชาชน", fine: 15000, time: 15, nb: false },
             { name: "ทำร้ายร่างกายในพื้นที่เซฟโซน", fine: 60000, time: 60, nb: true },
             { name: "ทะเลาะวิวาทในพื้นที่เซฟโซน", fine: 60000, time: 60, nb: true },
             { name: "เจตนาฆ่าในพื้นที่เซฟโซน", fine: 60000, time: 60, nb: true },
-            { name: "ทำร้ายร่างกายประชาชน", fine: 15000, time: 15, nb: false },
             { name: "ทะเลาะวิวาทในพื้นที่สาธารณะ", fine: 10000, time: 10, nb: false },
             { name: "ทะเลาะวิวาทแบบกลุ่ม", fine: 15000, time: 15, nb: false },
             { name: "ยักยอกทรัพย์ ฉ้อโกง", fine: 45000, time: 45, nb: false },
@@ -322,7 +392,7 @@
 
         function buildTabsUI(containerId, list) {
             document.getElementById(containerId).innerHTML = list.map(c => `
-                <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer hover:border-slate-700 transition">
+                <label class="flex items-center justify-between p-3 bg-subcard rounded-xl cursor-pointer">
                     <div class="flex items-start gap-3 w-full">
                         <input type="checkbox" class="crime-checkbox custom-checkbox mt-1" data-fine="${c.fine}" data-time="${c.time}" data-name="${c.name}" data-logname="${c.logName || ''}" data-type="normal" data-nobail="${c.nb}">
                         <div class="w-full">
@@ -342,30 +412,17 @@
         function switchTab(id) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
             document.getElementById('tab-content-' + id).classList.remove('hidden');
-            
             const mainForm = document.getElementById('main-form-wrapper');
-            if(id === 3) {
-                mainForm.classList.add('hidden');
-            } else {
-                mainForm.classList.remove('hidden');
-            }
+            if(id === 3) mainForm.classList.add('hidden');
+            else mainForm.classList.remove('hidden');
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('bg-gradient-to-r', 'from-blue-500', 'to-cyan-500', 'text-white', 'shadow-md');
                 btn.classList.add('bg-slate-900', 'text-gray-400');
             });
-            
             const activeBtn = document.getElementById('btn-tab-' + id);
             activeBtn.classList.remove('bg-slate-900', 'text-gray-400');
             activeBtn.classList.add('bg-gradient-to-r', 'from-blue-500', 'to-cyan-500', 'text-white', 'shadow-md');
-        }
-
-        function validateAreas(type) {
-            if (type === 'city' || type === 'water') {
-                if (document.getElementById('area-city').checked || document.getElementById('area-water').checked) {
-                    document.getElementById('area-hard').checked = false;
-                }
-            }
         }
 
         function handleBailClick(type) {
@@ -380,17 +437,47 @@
         let globalShortCrimesText = "";
 
         function runCalculation() {
+            const areaRisk = document.getElementById('area-risk');
+            const areaHard = document.getElementById('area-hard');
+            const areaCity = document.getElementById('area-city');
+            const areaWater = document.getElementById('area-water');
+            
+            const areaUpper = document.getElementById('area-upper');
+            const areaDesert = document.getElementById('area-desert');
+            const areaOut = document.getElementById('area-out');
+            const areaAir = document.getElementById('area-air');
+
+            const groupRiskSub = [areaCity, areaWater];
+            const groupHardSub = [areaUpper, areaDesert, areaOut, areaAir];
+            const allAreaElements = [areaRisk, areaHard, areaCity, areaWater, areaUpper, areaDesert, areaOut, areaAir];
+
+            allAreaElements.forEach(el => el.disabled = false);
+
+            const isRiskGroupActive = areaRisk.checked || areaCity.checked || areaWater.checked;
+            if (isRiskGroupActive) {
+                areaHard.disabled = true;
+                groupHardSub.forEach(el => el.disabled = true);
+                if (areaCity.checked) areaWater.disabled = true;
+                if (areaWater.checked) areaCity.disabled = true;
+            }
+
+            const isHardGroupActive = areaHard.checked || areaUpper.checked || areaDesert.checked || areaOut.checked || areaAir.checked;
+            if (isHardGroupActive) {
+                areaRisk.disabled = true;
+                groupRiskSub.forEach(el => el.disabled = true);
+                const checkedSub = groupHardSub.find(el => el.checked);
+                if (checkedSub) {
+                    groupHardSub.forEach(el => {
+                        if (el !== checkedSub) el.disabled = true;
+                    });
+                }
+            }
+
             let baseFine = 0;
             let baseTime = 0;
             let carMultiplier = 0; 
             let selectedCrimes = [];
             let hasNoBailCrime = false;
-
-            if (document.getElementById('area-hard').checked) {
-                if (document.getElementById('area-city').checked || document.getElementById('area-water').checked) {
-                    document.getElementById('area-hard').checked = false;
-                }
-            }
 
             document.querySelectorAll('.crime-checkbox').forEach(cb => {
                 if (cb.checked) {
@@ -402,7 +489,6 @@
                     const isNoBail = cb.getAttribute('data-nobail') === 'true';
 
                     if (isNoBail) { hasNoBailCrime = true; }
-
                     const displayTitle = logName ? logName : name;
 
                     if (type === 'normal') {
@@ -450,7 +536,6 @@
             if (document.getElementById('car-trade').checked) carMultiplier += 5;
 
             let activeMultiplier = carMultiplier === 0 ? 1 : carMultiplier;
-
             let finalFine = baseFine * activeMultiplier;
             let finalTime = baseTime;
             let totalBailCost = 0;
@@ -495,7 +580,6 @@
                 sideList.innerText = "ข้อหาจะแสดงที่นี่...";
             }
 
-            // ================= คำนวณสรุปข้อมูลและแสดงผล TAB 3 =================
             let baseCrimesTitle = selectedCrimes.join(' + ');
             if (document.getElementById('car-wheel').checked) baseCrimesTitle += " + ล้อโทนมืด";
             if (document.getElementById('car-color').checked) baseCrimesTitle += " + สีรถโทนมืด";
@@ -514,7 +598,6 @@
                 autoBailCost = (baseTime - 5) * 2000;
             }
 
-            // อัปเดตข้อมูล UI หน้า TAB 3 
             document.getElementById('log-nobail-title').innerText = noBailTitle || "-";
             document.getElementById('log-nobail-fine').innerText = finalFine.toLocaleString();
             document.getElementById('log-nobail-time').innerText = baseTime + " นาที";
@@ -536,23 +619,40 @@
         }
 
         function processCopyMain() {
-            if (!globalShortCrimesText) {
-                alert('โปรดเลือกข้อหาก่อนคัดลอกครับ!');
-                return;
-            }
+            if (!globalShortCrimesText) return;
             navigator.clipboard.writeText(globalShortCrimesText).then(() => {
-                alert(`คัดลอกเรียบร้อย:\n"${globalShortCrimesText}"`);
+                const btn = document.getElementById('btn-main-copy');
+                const originalHTML = btn.innerHTML;
+                const originalClass = btn.className;
+                btn.innerHTML = "✓ คัดลอกสำเร็จ!";
+                btn.className = "btn-bounce w-full bg-emerald-500 text-white font-extrabold py-3 rounded-lg text-sm shadow-md cursor-pointer transition-all duration-300 flex items-center justify-center gap-2 animate-pulse";
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.className = originalClass;
+                }, 1500);
             });
         }
 
         function copyToClipboard(buttonId) {
-            const textToCopy = document.getElementById(buttonId).getAttribute('data-text');
-            if (!textToCopy || textToCopy === "-" || textToCopy === "ไม่สามารถประกันตัวได้") {
-                alert('ไม่มีข้อมูลคดีความให้คัดลอกในขณะนี้ครับ!');
-                return;
-            }
+            const btn = document.getElementById(buttonId);
+            const textToCopy = btn.getAttribute('data-text');
+            if (!textToCopy || textToCopy === "-" || textToCopy === "ไม่สามารถประกันตัวได้") return;
+            
             navigator.clipboard.writeText(textToCopy).then(() => {
-                alert('คัดลอกข้อมูลสรุปไปยังคลิปบอร์ดสำเร็จแล้วครับ! ✨');
+                const originalHTML = btn.innerHTML;
+                const originalClass = btn.className;
+                
+                btn.innerHTML = "✓ คัดลอกสำเร็จ!";
+                btn.className = "btn-bounce w-full bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 animate-pulse";
+                
+                if(buttonId === 'log-twitter-btn') {
+                    btn.className = "btn-bounce w-full md:w-auto bg-emerald-500 text-white font-bold py-3 px-8 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 animate-pulse";
+                }
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.className = originalClass;
+                }, 1500);
             });
         }
 
@@ -566,8 +666,8 @@
             runCalculation();
         }
 
-        document.addEventListener('change', runCalculation);
-        document.addEventListener('input', runCalculation);
+        document.addEventListener('change', () => runCalculation());
+        document.addEventListener('input', () => runCalculation());
     </script>
 </body>
 </html>
